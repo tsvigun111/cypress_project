@@ -1,81 +1,75 @@
-# Cypress Test Project
+# Memberstack Cypress Testing Assessment
 
-This project is designed for automated testing using **Cypress** for frontend testing and **k6** for load testing.
-It includes performance audits using **Lighthouse** and accessibility testing using **Pa11y**.
+## Overview
 
----
+This is a testing assessment for Cypress QA Engineer candidates at Memberstack. The application is a simple user management system that allows you to create, read, update, and delete user records.
 
-## Technologies Used
-
-The project uses the following technologies and dependencies:
-
-- **Cypress**: For end-to-end (E2E) frontend testing.
-- **k6**: For load testing backend APIs.
-- **Lighthouse**: Integrated via `@cypress-audit/lighthouse` for performance audits.
-- **Pa11y**: Integrated via `@cypress-audit/pa11y` for accessibility testing.
-- **Mochawesome**: For generating detailed test reports.
-- **ESLint**: For code linting and maintaining code quality.
-
-### Key Dependencies
-
-- `@cypress-audit/lighthouse`
-- `@cypress-audit/pa11y`
-- `cypress-audit`
-- `mochawesome`
-- `k6`
-- `eslint`
-- `ws` (WebSocket library for testing WebSocket connections)
-
----
-
-## How to Run Tests
+## Getting Started
 
 ### Prerequisites
 
-1. **Node.js**: Ensure Node.js is installed on your system.
-2. **Git**: Ensure Git is installed to clone the repository.
+- Node.js (v16 or higher)
+- npm (v7 or higher)
 
----
+### Installation
 
-## Setup Instructions
-
-### Step 1: Clone the Repository
-
-Clone the repository to your local machine:
+1. Clone this repository
 
 ```bash
-git clone https://github.com/Arsenmelnyk1/cypress_test_project.git
-cd cypress_test_project
+git clone [repository-url]
+cd memberstack-cypress-assessment
 ```
 
-### Step 2: Install Dependencies
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Step 3: Run Tests
+3. Start the application
 
 ```bash
-"npm run e2e:test" - Runs Cypress E2E tests in Chrome.
-"npm run load:test" - Runs k6 load tests.
+npm start
 ```
 
-All Cypress tests and generate reports in the cypress/reports folder.
-The load test script located in cypress/e2e/load.js.
+The application will be available at http://localhost:3000
 
-## Rabic RabbitMQ API
-
-### Instruction how to run using Postman:
-
-1. Install Erlang.
-2. Install RabbitMQ server.
-3. Launch RabbitMQ CLI.
-4. Run command:
+4. Open Cypress
 
 ```bash
-rabbitmq-plugins.bat enable rabbitmq_management.
+npm run cypress:open
 ```
 
-5. Open Postman.
-6. Import `rabbitMQAPI.postman_collection` the collection and run.
+## Project Structure
+
+```
+├── public/               # Static files
+├── src/                  # React application source
+│   ├── App.jsx           # Main application component
+│   ├── App.css           # Application styling
+│   ├── UserForm.jsx      # User management component
+│   ├── UserForm.css      # Component styling
+│   └── index.js          # Application entry point
+├── cypress/              # Cypress tests
+│   ├── e2e/              # End-to-end tests
+│   │   └── userForm.sample.cy.js  # Sample test file
+│   ├── fixtures/         # Test data
+│   └── support/          # Support files
+└── package.json          # Project configuration
+```
+
+## Assessment Instructions
+
+Please refer to the `INSTRUCTIONS.md` file for detailed information about the assessment requirements, deliverables, and evaluation criteria.
+
+## Technologies Used
+
+- React 19
+- Cypress 14
+- Testing Library/Cypress
+
+## Contact
+
+If you encounter any technical issues with the assessment environment, please contact the Memberstack hiring team.
+
+Good luck!

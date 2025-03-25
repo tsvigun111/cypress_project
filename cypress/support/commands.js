@@ -23,3 +23,36 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Cypress.Commands.add(
+//   "createUser",
+//   (name, email, role = "user", status = "active") => {
+//     cy.get('[data-cy="input-name"]').clear().type(name);
+//     cy.get('[data-cy="input-email"]').clear().type(email);
+//     cy.get('[data-cy="select-role"]').select(role);
+
+//     if (status === "active") {
+//       cy.get('[data-cy="radio-active"]').check();
+//     } else {
+//       cy.get('[data-cy="radio-inactive"]').check();
+//     }
+
+//     cy.get('[data-cy="btn-submit"]').click();
+//   }
+// );
+
+Cypress.Commands.add(
+  "createUser",
+  (name, email, role, status) => {
+    cy.get('[data-cy="input-name"]').clear().type(name);
+    cy.get('[data-cy="input-email"]').clear().type(email);
+    cy.get('[data-cy="select-role"]').select(role);
+
+    if (status === "active") {
+      cy.get('[data-cy="radio-active"]').check();
+    } else {
+      cy.get('[data-cy="radio-inactive"]').check();
+    }
+    cy.get('[data-cy="btn-submit"]').click();
+  }
+);

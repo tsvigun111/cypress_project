@@ -1,51 +1,35 @@
-const { lighthouse, prepareAudit } = require('@cypress-audit/lighthouse');
-const fs = require('fs');
+const { defineConfig } = require("cypress");
 
-module.exports = {
+module.exports = defineConfig({
   e2e: {
-    browser: 'chrome',
+    baseUrl: "http://localhost:3000",
     experimentalRunAllSpecs: true,
+    defaultCommandTimeout: 10000,
+    pageLoadTimeout: 10000,
     specPattern: [
-      'cypress/e2e/login-page.cy.js',
-      'cypress/e2e/message-broker.cy.js',
-      'cypress/e2e/crud.cy.js',
-      'cypress/e2e/perfomence.cy.js',
+      'cypress/e2e/userForm.cy.js'
     ],
-    chromeWebSecurity: false,
-    video: true,
-    screenshotOnRunFailure: true,
-    videoCompression: true,
-    reporter: 'mochawesome',
-    reporterOptions: {
-      reportDir: 'cypress/reports/',
-      reportFilename: 'test-report',
-      overwrite: false,
-      html: false,
-      json: true,
-      merge: true,
-    },
-
-    setupNodeEvents(on, config) {
-      // Prepare Lighthouse audit
-      on('before:browser:launch', (browser = {}, launchOptions) => {
-        prepareAudit(launchOptions);
-      });
-
-      on('task', {
-        lighthouse: lighthouse(),
-      });
-
-      // Clean up videos if no tests failed
-      on('after:spec', (spec, results) => {
-        if (results && results.video) {
-          const failures = results.tests.some(test =>
-            test.attempts.some(attempt => attempt.state === 'failed')
-          );
-          if (!failures) {
-            fs.unlinkSync(results.video);
-          }
-        }
-      });
-    },
   },
-};
+  retries: {
+    runMode: 2,
+    openMode: 2,
+  },
+  viewportWidth: 1920,
+  viewportHeight: 1080,
+  chromeWebSecurity: false,
+  video: true,
+  screenshotOnRunFailure: true,
+  videoCompression: false,
+  setupNodeEvents(on) {
+    on('after:spec', (spec, results) => {
+      if (results && results.video) {
+        const failures = results.tests.some(test =>
+          test.attempts.some(attempt => attempt.state === 'failed'),
+        )
+        if (!failures) {
+          fs.unlinkSync(results.video)
+        }
+      }
+    })
+  },
+});

@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs"
-  },
-  "include": ["components/**/*.js", "cypress/**/*.js"],
-  "exclude": ["node_modules"]
-}
