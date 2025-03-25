@@ -1,0 +1,414 @@
+{
+	"info": {
+		"_postman_id": "a71eb821-a908-4c60-87a6-a0ffb659b5ff",
+		"name": "RabbitMQ API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36808943"
+	},
+	"item": [
+		{
+			"name": "Get server overview",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    const schema = utilPostFunctions.getResponseSchema(pm, \"getServerOverview\");\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check product version\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.product_version).to.eql(\"4.0.6\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"properties\": {},\n    \"routing_key\": \"my key\",\n    \"payload\": \"my body\",\n    \"payload_encoding\": \"string\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:15672/api/overview",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "15672",
+					"path": [
+						"api",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify publishing the invalid message.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Verify that false* is returned as routed result.\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.routed).to.eql(false);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"properties\": {},\r\n    \"routing_key\": \"asd\",\r\n    \"payload\": \"my body\",\r\n    \"payload_encoding\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:15672/api/exchanges/%2F/amq.direct/publish",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "15672",
+					"path": [
+						"api",
+						"exchanges",
+						"%2F",
+						"amq.direct",
+						"publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify that error message is received when publishing message in the not existed exchange.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    const schema = utilPostFunctions.getResponseSchema(pm, \"checkErrorMsg\");\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check product version\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"not_found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"properties\": {},\r\n    \"routing_key\": \"asd\",\r\n    \"payload\": \"my body\",\r\n    \"payload_encoding\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:15672/api/exchanges/%2F/exchange/publish",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "15672",
+					"path": [
+						"api",
+						"exchanges",
+						"%2F",
+						"exchange",
+						"publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify deleting the exchange as unauthorized user.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    const schema = utilPostFunctions.getResponseSchema(pm, \"checkErrorMsg\");\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check product version\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"not_authorised\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"direct\",\r\n    \"auto_delete\": false,\r\n    \"durable\": true,\r\n    \"internal\": false,\r\n    \"arguments\": {\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:15672/api/exchanges/%2F/amq.fanout",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "15672",
+					"path": [
+						"api",
+						"exchanges",
+						"%2F",
+						"amq.fanout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{basicAuthPassword}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{basicAuthUsername}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"utilPostFunctions = {\r",
+					"   \r",
+					"    getResponseSchema: function(pm, endpointName) {\r",
+					"        let schema;\r",
+					"        switch(endpointName) {\r",
+					"            case \"getServerOverview\":\r",
+					"                schema ={\r",
+					"                    \"type\": \"object\",\r",
+					"                    \"properties\": {\r",
+					"                        \"management_version\": { \"type\": \"string\" },\r",
+					"                        \"rates_mode\": { \"type\": \"string\" },\r",
+					"                        \"sample_retention_policies\": {\r",
+					"                        \"type\": \"object\",\r",
+					"                        \"properties\": {\r",
+					"                            \"global\": { \"type\": \"array\", \"items\": { \"type\": \"integer\" } },\r",
+					"                            \"basic\": { \"type\": \"array\", \"items\": { \"type\": \"integer\" } },\r",
+					"                            \"detailed\": { \"type\": \"array\", \"items\": { \"type\": \"integer\" } }\r",
+					"                        }\r",
+					"                        },\r",
+					"                        \"exchange_types\": {\r",
+					"                        \"type\": \"array\",\r",
+					"                        \"items\": {\r",
+					"                            \"type\": \"object\",\r",
+					"                            \"properties\": {\r",
+					"                            \"name\": { \"type\": \"string\" },\r",
+					"                            \"description\": { \"type\": \"string\" },\r",
+					"                            \"enabled\": { \"type\": \"boolean\" }\r",
+					"                            },\r",
+					"                            \"required\": [\"name\", \"description\", \"enabled\"]\r",
+					"                        }\r",
+					"                        },\r",
+					"                        \"product_version\": { \"type\": \"string\" },\r",
+					"                        \"product_name\": { \"type\": \"string\" },\r",
+					"                        \"rabbitmq_version\": { \"type\": \"string\" },\r",
+					"                        \"cluster_name\": { \"type\": \"string\" },\r",
+					"                        \"cluster_tags\": { \"type\": \"object\" },\r",
+					"                        \"node_tags\": { \"type\": \"object\" },\r",
+					"                        \"erlang_version\": { \"type\": \"string\" },\r",
+					"                        \"erlang_full_version\": { \"type\": \"string\" },\r",
+					"                        \"disable_stats\": { \"type\": \"boolean\" },\r",
+					"                        \"default_queue_type\": { \"type\": \"string\" },\r",
+					"                        \"is_op_policy_updating_enabled\": { \"type\": \"boolean\" },\r",
+					"                        \"enable_queue_totals\": { \"type\": \"boolean\" },\r",
+					"                        \"message_stats\": { \"type\": \"object\" },\r",
+					"                        \"churn_rates\": {\r",
+					"                        \"type\": \"object\",\r",
+					"                        \"properties\": {\r",
+					"                            \"connection_closed\": { \"type\": \"integer\" },\r",
+					"                            \"queue_declared\": { \"type\": \"integer\" },\r",
+					"                            \"queue_created\": { \"type\": \"integer\" },\r",
+					"                            \"connection_created\": { \"type\": \"integer\" },\r",
+					"                            \"queue_deleted\": { \"type\": \"integer\" },\r",
+					"                            \"channel_created\": { \"type\": \"integer\" },\r",
+					"                            \"channel_closed\": { \"type\": \"integer\" },\r",
+					"                            \"queue_deleted_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"queue_created_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"queue_declared_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"channel_closed_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"channel_created_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"connection_closed_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } },\r",
+					"                            \"connection_created_details\": { \"type\": \"object\", \"properties\": { \"rate\": { \"type\": \"number\" } } }\r",
+					"                        }\r",
+					"                        },\r",
+					"                        \"queue_totals\": { \"type\": \"object\" },\r",
+					"                        \"object_totals\": {\r",
+					"                        \"type\": \"object\",\r",
+					"                        \"properties\": {\r",
+					"                            \"channels\": { \"type\": \"integer\" },\r",
+					"                            \"consumers\": { \"type\": \"integer\" },\r",
+					"                            \"exchanges\": { \"type\": \"integer\" },\r",
+					"                            \"queues\": { \"type\": \"integer\" },\r",
+					"                            \"connections\": { \"type\": \"integer\" }\r",
+					"                        }\r",
+					"                        },\r",
+					"                        \"statistics_db_event_queue\": { \"type\": \"integer\" },\r",
+					"                        \"node\": { \"type\": \"string\" },\r",
+					"                        \"listeners\": {\r",
+					"                        \"type\": \"array\",\r",
+					"                        \"items\": {\r",
+					"                            \"type\": \"object\",\r",
+					"                            \"properties\": {\r",
+					"                            \"node\": { \"type\": \"string\" },\r",
+					"                            \"protocol\": { \"type\": \"string\" },\r",
+					"                            \"ip_address\": { \"type\": \"string\" },\r",
+					"                            \"port\": { \"type\": \"integer\" },\r",
+					"                            \"socket_opts\": {\r",
+					"                                \"oneOf\": [\r",
+					"                                { \"type\": \"object\", \"additionalProperties\": true },\r",
+					"                                { \"type\": \"array\", \"items\": {} }\r",
+					"                                ]\r",
+					"                            }\r",
+					"                            },\r",
+					"                            \"required\": [\"node\", \"protocol\", \"ip_address\", \"port\"]\r",
+					"                        }\r",
+					"                        },\r",
+					"                        \"contexts\": {\r",
+					"                        \"type\": \"array\",\r",
+					"                        \"items\": {\r",
+					"                            \"type\": \"object\",\r",
+					"                            \"properties\": {\r",
+					"                            \"ssl_opts\": { \"type\": \"array\" },\r",
+					"                            \"node\": { \"type\": \"string\" },\r",
+					"                            \"description\": { \"type\": \"string\" },\r",
+					"                            \"path\": { \"type\": \"string\" },\r",
+					"                            \"cowboy_opts\": { \"oneOf\": [{ \"type\": \"string\" }, { \"type\": \"object\" }] },\r",
+					"                            \"port\": { \"oneOf\": [{ \"type\": \"string\" }, { \"type\": \"integer\" }] }\r",
+					"                            }\r",
+					"                        }\r",
+					"                        }\r",
+					"                    },\r",
+					"                    \"required\": [\"management_version\", \"product_version\", \"product_name\", \"rabbitmq_version\", \"node\", \"listeners\"]\r",
+					"                    }\r",
+					"\r",
+					"                break;\r",
+					"\r",
+					"            case \"checkErrorMsg\":\r",
+					"                schema ={\r",
+					"                    \"type\": \"object\",\r",
+					"                    \"properties\": {\r",
+					"                        \"error\": { \"type\": \"string\" },\r",
+					"                        \"reason\": { \"type\": \"string\" }\r",
+					"                    },\r",
+					"                    \"required\": [\"error\", \"reason\"]\r",
+					"                }\r",
+					"                break;\r",
+					"\r",
+					"            default:\r",
+					"                throw new Error(\"Invalid endpointName provided.\");\r",
+					"        }\r",
+					"        return schema;\r",
+					"    }\r",
+					"};\r",
+					"\r",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "basicAuthUsername",
+			"value": "guest",
+			"type": "string"
+		},
+		{
+			"key": "basicAuthPassword",
+			"value": "guest",
+			"type": "string"
+		}
+	]
+}

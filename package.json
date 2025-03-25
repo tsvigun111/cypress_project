@@ -1,0 +1,22 @@
+{
+  "name": "cypress_test_project",
+  "version": "0.1.0",
+  "description": "Cypress Test Project",
+  "scripts": {
+    "e2e:test": "npx cypress run --browser=chrome",
+    "load:test": "k6 run cypress/e2e/load.js"
+  },
+  "devDependencies": {
+    "@cypress-audit/lighthouse": "^1.4.2",
+    "@cypress-audit/pa11y": "^1.4.2",
+    "@eslint/js": "^9.21.0",
+    "cypress-audit": "^1.0.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^5.0.0",
+    "mochawesome-report-generator": "^6.2.0",
+    "ws": "^8.18.1"
+  }
+}
