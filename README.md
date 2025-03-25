@@ -58,18 +58,8 @@ npm run cypress:open
 └── package.json          # Project configuration
 ```
 
-## Assessment Instructions
-
-Please refer to the `INSTRUCTIONS.md` file for detailed information about the assessment requirements, deliverables, and evaluation criteria.
-
 ## Technologies Used
 
 - React 19
 - Cypress 14
 - Testing Library/Cypress
-
-## Contact
-
-If you encounter any technical issues with the assessment environment, please contact the Memberstack hiring team.
-
-Good luck!
